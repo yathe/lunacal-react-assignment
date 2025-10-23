@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const InfoWidget = () => {
-  const [active, setActive] = useState("About Me");
+  const [active, setActive] = useState<
+    "About Me" | "Experiences" | "Recommended"
+  >("About Me");
   const tabs = ["About Me", "Experiences", "Recommended"];
   const content = {
     "About Me": `Hello! I’m Dave, your sales rep here from Salesforce. I’ve been working at this awesome company for 3 years now.
@@ -14,7 +16,7 @@ I was born and raised in Albany, NY& have been living in Santa Carla for the pas
 
   return (
     <div
-      className="absolute w-[90%] sm:w-[650px] h-auto sm:h-[270px] left-1/2 sm:left-[882px] top-[96px] -translate-x-1/2 sm:translate-x-0 rounded-[18.9px] p-4 sm:p-6"
+      className="absolute w-[80%] sm:w-[650px] h-auto sm:h-[270px] left-1/2 sm:left-[882px] top-[96px] -translate-x-1/2 sm:translate-x-0 rounded-[18.9px] p-4 sm:p-6"
       style={{
         background: "#363C43",
         boxShadow: "5.67px 5.67px 3.78px rgba(0,0,0,0.4)",
@@ -25,7 +27,9 @@ I was born and raised in Albany, NY& have been living in Santa Carla for the pas
         {tabs.map((tab) => (
           <button
             key={tab}
-            onClick={() => setActive(tab)}
+            onClick={() =>
+              setActive(tab as "About Me" | "Experiences" | "Recommended")
+            }
             className={`relative px-4 sm:px-6 py-2 rounded-full font-medium text-sm transition-all duration-200 ${
               active === tab
                 ? "text-white"

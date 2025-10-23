@@ -1,9 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CircleArrowLeft, CircleArrowRight } from "lucide-react";
 
 const GalleryWidget = () => {
-  const [images, setImages] = useState([
+  const [images, setImages] = useState<string[]>([
     "https://picsum.photos/id/1015/800/800",
     "https://picsum.photos/id/1025/800/800",
     "https://picsum.photos/id/1035/800/800",
@@ -11,8 +11,8 @@ const GalleryWidget = () => {
     "https://picsum.photos/id/1055/800/800",
   ]);
 
-  const fileInputRef = useRef(null);
-  const scrollRef = useRef(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const stored = localStorage.getItem("galleryImages");
@@ -23,13 +23,16 @@ const GalleryWidget = () => {
     localStorage.setItem("galleryImages", JSON.stringify(images));
   }, [images]);
 
-  const handleAddImageClick = () => fileInputRef.current.click();
-  const handleFileChange = (e) => {
+  const handleAddImageClick = () => fileInputRef.current?.click();
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = (event) =>
-      setImages((prev) => [...prev, event.target.result]);
+    reader.onload = (event: ProgressEvent<FileReader>) => {
+      if (event.target?.result && typeof event.target.result === "string") {
+        setImages((prev) => [...prev, event.target!.result as string]);
+      }
+    };
     reader.readAsDataURL(file);
   };
 
